@@ -19,7 +19,8 @@ class TextTransformerBlock(nn.Module):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = x + self.attn(self.norm1(x), self.norm1(x), self.norm1(x))[0]
+        x_norm = self.norm1(x)
+        x = x + self.attn(x_norm, x_norm, x_norm)[0]
         x = x + self.mlp(self.norm2(x))
         return x
 
@@ -50,6 +51,7 @@ class TextEncoder(nn.Module):
         self._init_weights()
 
     def _init_weights(self):
+        nn.init.trunc_normal_(self.token_embed.weight, std=0.02)
         nn.init.trunc_normal_(self.pos_embed, std=0.02)
         for block in self.blocks:
             for p in block.parameters():

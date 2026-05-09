@@ -6,7 +6,10 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(git *)",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Bash(pip install *)",
+      "Bash(python -c \"import torchvision; print\\('torchvision available'\\)\")",
+      "Bash(echo \"Exit: $?\")"
     ]
   }
 }

@@ -32,7 +32,8 @@ class TransformerBlock(nn.Module):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = x + self.attn(self.norm1(x), self.norm1(x), self.norm1(x))[0]
+        x_norm = self.norm1(x)
+        x = x + self.attn(x_norm, x_norm, x_norm)[0]
         x = x + self.mlp(self.norm2(x))
         return x
 
@@ -48,12 +49,14 @@ class ViTB32(nn.Module):
         num_heads: int = 12,
         mlp_dim: int = 3072,
         proj_dim: int = 768,
+        image_size: int = 224,
         use_gradient_checkpointing: bool = True,
     ):
         super().__init__()
         self.patch_embed = PatchEmbedding(patch_size, in_channels=3, hidden_dim=hidden_dim)
         self.cls_token = nn.Parameter(torch.zeros(1, 1, hidden_dim))
-        self.pos_embed = nn.Parameter(torch.zeros(1, 50, hidden_dim))  # 1 CLS + 49 patches
+        num_patches = (image_size // patch_size) ** 2
+        self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 1, hidden_dim))
         self.blocks = nn.ModuleList([
             TransformerBlock(hidden_dim, num_heads, mlp_dim) for _ in range(num_layers)
         ])
