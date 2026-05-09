@@ -1,0 +1,7 @@
+data/
+checkpoints/
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
+wandb/

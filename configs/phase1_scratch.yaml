@@ -1,0 +1,41 @@
+# Phase 1: From-scratch CLIP training config
+data:
+  flickr8k_root: "data/flickr8k"
+  flickr8k_captions: "data/flickr8k/captions.txt"
+  val_split: 0.1
+  img_size: 224
+  max_text_len: 77
+
+model:
+  image:
+    name: "vit_b32"
+    patch_size: 32
+    hidden_dim: 768
+    num_layers: 12
+    num_heads: 12
+    mlp_dim: 3072
+  text:
+    vocab_size: 10000
+    hidden_dim: 512
+    num_layers: 6
+    num_heads: 8
+    mlp_dim: 2048
+    max_len: 77
+  proj_dim: 768
+  temperature_init: 0.07
+
+train:
+  batch_size: 128
+  grad_accum_steps: 2       # effective batch = 256
+  epochs: 30
+  lr: 1.0e-4
+  weight_decay: 0.2
+  warmup_steps: 500
+  val_every: 500
+  precision: "bf16"
+  gradient_checkpointing: true
+  num_workers: 4
+
+output:
+  checkpoint_dir: "checkpoints/phase1"
+  log_dir: "logs/phase1"
