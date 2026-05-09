@@ -1,5 +1,6 @@
 """Flickr8k dataset for CLIP training."""
 import os
+import tempfile
 from pathlib import Path
 from PIL import Image
 import torch
@@ -15,7 +16,6 @@ def _train_bpe_tokenizer(captions: list[str], vocab_size: int = 10000) -> Tokeni
         vocab_size=vocab_size,
         special_tokens=["[PAD]", "[UNK]", "[BOS]", "[EOS]"],
     )
-    import tempfile
     with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
         for c in captions:
             f.write(c.lower() + "\n")
@@ -62,7 +62,8 @@ class Flickr8kDataset(Dataset):
         encoded = self.tokenizer.encode(f"[BOS] {text} [EOS]")
         ids = encoded.ids[:self.max_len]
         if len(ids) < self.max_len:
-            ids = ids + [0] * (self.max_len - len(ids))  # PAD=0
+            pad_id = self.tokenizer.token_to_id("[PAD]")
+            ids = ids + [pad_id] * (self.max_len - len(ids))
         return torch.tensor(ids, dtype=torch.long)
 
     def __getitem__(self, idx: int) -> tuple:

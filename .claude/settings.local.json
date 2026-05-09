@@ -9,7 +9,8 @@
       "Bash(python3 *)",
       "Bash(pip install *)",
       "Bash(python -c \"import torchvision; print\\('torchvision available'\\)\")",
-      "Bash(echo \"Exit: $?\")"
+      "Bash(echo \"Exit: $?\")",
+      "Bash(echo \"exit: $?\")"
     ]
   }
 }
