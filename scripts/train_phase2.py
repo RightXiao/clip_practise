@@ -4,11 +4,20 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import json
+import random
+import numpy as np
 import torch
 import open_clip
 from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from omegaconf import OmegaConf
+
+
+def set_seed(seed: int = 42):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
 
 
 class COCOSubset(Dataset):
@@ -59,6 +68,11 @@ class OpenClipWrapper(torch.nn.Module):
 
 def main():
     config = OmegaConf.load("configs/phase2_finetune.yaml")
+
+    seed = config.train.get("seed", 42)
+    set_seed(seed)
+    print(f"Random seed: {seed}")
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     model, _, preprocess = open_clip.create_model_and_transforms(

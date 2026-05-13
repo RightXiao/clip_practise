@@ -14,6 +14,7 @@ model:
     num_layers: 12
     num_heads: 12
     mlp_dim: 3072
+    gradient_checkpointing: true
   text:
     vocab_size: 10000
     hidden_dim: 512
@@ -21,6 +22,7 @@ model:
     num_heads: 8
     mlp_dim: 2048
     max_len: 77
+    gradient_checkpointing: true
   proj_dim: 768
   temperature_init: 0.07
 
@@ -32,8 +34,8 @@ train:
   weight_decay: 0.2
   warmup_steps: 500
   val_every: 500
+  seed: 42
   precision: "bf16"
-  gradient_checkpointing: true
   num_workers: 4
 
 output:

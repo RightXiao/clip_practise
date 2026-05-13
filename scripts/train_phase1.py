@@ -3,6 +3,8 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
+import random
+import numpy as np
 import torch
 from omegaconf import OmegaConf
 
@@ -11,8 +13,19 @@ from src.data.dataset import create_dataloaders
 from src.train.trainer import train
 
 
+def set_seed(seed: int = 42):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
+
 def main():
     config = OmegaConf.load("configs/phase1_scratch.yaml")
+
+    seed = config.train.get("seed", 42)
+    set_seed(seed)
+    print(f"Random seed: {seed}")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")

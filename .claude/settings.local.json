@@ -10,7 +10,17 @@
       "Bash(pip install *)",
       "Bash(python -c \"import torchvision; print\\('torchvision available'\\)\")",
       "Bash(echo \"Exit: $?\")",
-      "Bash(echo \"exit: $?\")"
+      "Bash(echo \"exit: $?\")",
+      "Bash(python *)",
+      "Bash(node *)",
+      "Read(//home/xiaoxianjun/.claude/plugins/cache/everything-claude-code/**)",
+      "Read(//home/xiaoxianjun/.claude/plugins/**)",
+      "Bash(claude --version)",
+      "Bash(claude update *)",
+      "Bash(npm view *)",
+      "Bash(sudo npm *)",
+      "Bash(claude install *)",
+      "Bash(~/.local/bin/claude *)"
     ]
   }
 }
